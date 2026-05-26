@@ -1,487 +1,235 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>PayNow Fintech Presentation</title>
-
-  <!-- Fonte Bordone -->
-  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;600;700&display=swap" rel="stylesheet">
-
-  <!-- Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PayNow Bank</title>
 
   <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      scroll-behavior:smooth;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
     }
 
-    body{
-      background:#050816;
-      color:white;
-      font-family:Arial, Helvetica, sans-serif;
-      overflow:hidden;
+    body {
+      background: linear-gradient(135deg, #041C32, #04293A);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
     }
 
-    .presentation{
-      width:100vw;
-      height:100vh;
-      position:relative;
+    .container {
+      width: 400px;
+      background: rgba(255,255,255,0.08);
+      padding: 30px;
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
     }
 
-    .slide{
-      width:100%;
-      height:100vh;
-      position:absolute;
-      top:0;
-      left:100%;
-      transition:1s ease;
-      padding:60px;
-      overflow:hidden;
-
-      background:
-      radial-gradient(circle at top left, rgba(0,255,200,0.18), transparent 35%),
-      radial-gradient(circle at bottom right, rgba(0,255,255,0.12), transparent 40%),
-      linear-gradient(135deg,#050816,#071a24,#0d1b2a);
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #00E5FF;
     }
 
-    .slide.active{
-      left:0;
+    h2 {
+      margin-bottom: 10px;
     }
 
-    .slide.prev{
-      left:-100%;
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 10px;
+      border: none;
+      border-radius: 10px;
     }
 
-    .glass{
-      background:rgba(255,255,255,0.05);
-      border:1px solid rgba(255,255,255,0.12);
-      backdrop-filter:blur(14px);
-      -webkit-backdrop-filter:blur(14px);
-      border-radius:28px;
-      padding:30px;
-      box-shadow:
-      0 0 25px rgba(0,255,200,0.10),
-      inset 0 0 10px rgba(255,255,255,0.04);
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background: #00E5FF;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 10px;
     }
 
-    .title{
-      font-family:'Bodoni Moda', serif;
-      font-size:4rem;
-      font-weight:700;
-      background:linear-gradient(to right,#00ffd0,#00c3ff);
-      -webkit-background-clip:text;
-      -webkit-text-fill-color:transparent;
-      margin-bottom:15px;
+    button:hover {
+      opacity: 0.9;
     }
 
-    .subtitle{
-      font-family:'Bodoni Moda', serif;
-      font-size:1.6rem;
-      color:#c7f9ff;
-      margin-bottom:25px;
+    .logout {
+      background: crimson;
+      color: white;
     }
 
-    .description{
-      max-width:700px;
-      font-size:1.1rem;
-      line-height:1.7;
-      color:#d8e6f1;
+    .hidden {
+      display: none;
     }
 
-    .center{
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      flex-direction:column;
-      height:100%;
-      text-align:center;
+    hr {
+      margin: 20px 0;
+      border: 1px solid rgba(255,255,255,0.1);
     }
 
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-      gap:25px;
-      margin-top:35px;
+    .actions {
+      margin-top: 15px;
     }
-
-    .card{
-      padding:28px;
-      border-radius:24px;
-      background:rgba(255,255,255,0.06);
-      border:1px solid rgba(255,255,255,0.08);
-      backdrop-filter:blur(12px);
-      transition:0.4s;
-    }
-
-    .card:hover{
-      transform:translateY(-8px);
-      box-shadow:0 0 30px rgba(0,255,200,0.25);
-    }
-
-    .card i{
-      font-size:2rem;
-      margin-bottom:18px;
-      color:#00ffd0;
-    }
-
-    .card h3{
-      font-family:'Bodoni Moda', serif;
-      margin-bottom:10px;
-      font-size:1.4rem;
-    }
-
-    .card p{
-      color:#d6e8ee;
-      line-height:1.6;
-    }
-
-    .dashboard{
-      display:flex;
-      gap:25px;
-      margin-top:40px;
-      flex-wrap:wrap;
-    }
-
-    .dashboard-card{
-      flex:1;
-      min-width:280px;
-      border-radius:28px;
-      padding:30px;
-      background:rgba(255,255,255,0.06);
-      border:1px solid rgba(255,255,255,0.08);
-      backdrop-filter:blur(16px);
-    }
-
-    .money{
-      font-size:2.2rem;
-      margin-top:15px;
-      color:#00ffd0;
-      font-weight:bold;
-    }
-
-    .feature-list{
-      margin-top:20px;
-    }
-
-    .feature-list li{
-      margin-bottom:14px;
-      list-style:none;
-      color:#d8e6f1;
-    }
-
-    .feature-list i{
-      color:#00ffd0;
-      margin-right:10px;
-    }
-
-    .navigation{
-      position:fixed;
-      bottom:30px;
-      right:40px;
-      z-index:999;
-      display:flex;
-      gap:15px;
-    }
-
-    .nav-btn{
-      width:55px;
-      height:55px;
-      border:none;
-      border-radius:50%;
-      background:linear-gradient(135deg,#00ffd0,#00c3ff);
-      color:#05111b;
-      font-size:1.2rem;
-      cursor:pointer;
-      font-weight:bold;
-      transition:0.3s;
-    }
-
-    .nav-btn:hover{
-      transform:scale(1.1);
-      box-shadow:0 0 20px rgba(0,255,200,0.5);
-    }
-
-    .floating-circle{
-      position:absolute;
-      border-radius:50%;
-      background:rgba(0,255,200,0.08);
-      filter:blur(30px);
-      animation:float 8s infinite ease-in-out;
-    }
-
-    .circle1{
-      width:250px;
-      height:250px;
-      top:-80px;
-      left:-80px;
-    }
-
-    .circle2{
-      width:350px;
-      height:350px;
-      bottom:-120px;
-      right:-100px;
-      animation-delay:2s;
-    }
-
-    @keyframes float{
-      0%{transform:translateY(0px);}
-      50%{transform:translateY(25px);}
-      100%{transform:translateY(0px);}
-    }
-
-    .slide-number{
-      position:absolute;
-      top:30px;
-      right:40px;
-      opacity:0.5;
-      font-size:0.9rem;
-    }
-
-    @media(max-width:768px){
-
-      .title{
-        font-size:2.5rem;
-      }
-
-      .subtitle{
-        font-size:1.2rem;
-      }
-
-      .slide{
-        padding:30px;
-      }
-
-    }
-
   </style>
 </head>
 <body>
 
-<div class="presentation">
+<div class="container">
+  <h1>PAYNOW BANK</h1>
 
-  <!-- Slide 1 -->
-  <section class="slide active">
-    <div class="floating-circle circle1"></div>
-    <div class="floating-circle circle2"></div>
+  <div id="authArea">
+    <h2>Criar Conta</h2>
 
-    <div class="center">
-      <div class="glass">
-        <h1 class="title">PayNow</h1>
-        <h2 class="subtitle">
-          Conta Digital e Meios de Pagamento para MEIs e Autônomos
-        </h2>
+    <input type="text" id="registerName" placeholder="Nome completo">
+    <input type="email" id="registerEmail" placeholder="Email">
+    <input type="password" id="registerPassword" placeholder="Senha">
 
-        <p class="description">
-          Uma fintech moderna criada para transformar a experiência financeira
-          de pequenos empreendedores através de pagamentos instantâneos,
-          segurança digital e gestão inteligente.
-        </p>
+    <button onclick="register()">Criar Conta</button>
 
-        <div style="margin-top:35px;">
-          <i class="fa-solid fa-mobile-screen-button" style="font-size:60px;color:#00ffd0;"></i>
-        </div>
-      </div>
+    <hr>
+
+    <h2>Entrar</h2>
+
+    <input type="email" id="loginEmail" placeholder="Email">
+    <input type="password" id="loginPassword" placeholder="Senha">
+
+    <button onclick="login()">Entrar</button>
+  </div>
+
+  <div id="dashboard" class="hidden">
+    <h2>Bem-vindo(a)</h2>
+
+    <p><strong>Nome:</strong> <span id="userName"></span></p>
+    <p><strong>Email:</strong> <span id="userEmail"></span></p>
+    <p><strong>Saldo:</strong> R$ <span id="userBalance"></span></p>
+
+    <div class="actions">
+      <input type="number" id="depositValue" placeholder="Valor depósito">
+      <button onclick="deposit()">Depositar</button>
     </div>
 
-    <div class="slide-number">01</div>
-  </section>
-
-  <!-- Slide 2 -->
-  <section class="slide">
-
-    <div class="floating-circle circle1"></div>
-    <div class="floating-circle circle2"></div>
-
-    <h1 class="title">Soluções Inteligentes</h1>
-    <h2 class="subtitle">Tecnologia financeira para o dia a dia</h2>
-
-    <div class="grid">
-
-      <div class="card">
-        <i class="fa-brands fa-pix"></i>
-        <h3>Pix Instantâneo</h3>
-        <p>
-          Transferências rápidas e pagamentos em segundos com total praticidade.
-        </p>
-      </div>
-
-      <div class="card">
-        <i class="fa-solid fa-shield-halved"></i>
-        <h3>Segurança Digital</h3>
-        <p>
-          Proteção avançada com autenticação inteligente e criptografia bancária.
-        </p>
-      </div>
-
-      <div class="card">
-        <i class="fa-solid fa-chart-line"></i>
-        <h3>Dashboard Financeiro</h3>
-        <p>
-          Controle de receitas, despesas e fluxo financeiro em tempo real.
-        </p>
-      </div>
-
-      <div class="card">
-        <i class="fa-solid fa-money-bill-transfer"></i>
-        <h3>Transferências</h3>
-        <p>
-          Envie e receba pagamentos de forma moderna e sem burocracia.
-        </p>
-      </div>
-
+    <div class="actions">
+      <input type="number" id="withdrawValue" placeholder="Valor saque">
+      <button onclick="withdraw()">Sacar</button>
     </div>
 
-    <div class="slide-number">02</div>
-  </section>
-
-  <!-- Slide 3 -->
-  <section class="slide">
-
-    <div class="floating-circle circle1"></div>
-    <div class="floating-circle circle2"></div>
-
-    <h1 class="title">Experiência do Usuário</h1>
-    <h2 class="subtitle">Interface moderna e intuitiva</h2>
-
-    <div class="dashboard">
-
-      <div class="dashboard-card">
-        <h3 style="font-family:'Bodoni Moda', serif;">Saldo Disponível</h3>
-        <div class="money">R$ 12.540,00</div>
-
-        <ul class="feature-list">
-          <li><i class="fa-solid fa-check"></i> Pagamentos rápidos</li>
-          <li><i class="fa-solid fa-check"></i> Interface amigável</li>
-          <li><i class="fa-solid fa-check"></i> Gestão simplificada</li>
-        </ul>
-      </div>
-
-      <div class="dashboard-card">
-        <h3 style="font-family:'Bodoni Moda', serif;">Conta Digital</h3>
-
-        <ul class="feature-list">
-          <li><i class="fa-solid fa-lock"></i> Segurança bancária</li>
-          <li><i class="fa-solid fa-wallet"></i> Cartão virtual</li>
-          <li><i class="fa-solid fa-building-columns"></i> Conta PJ moderna</li>
-          <li><i class="fa-solid fa-bolt"></i> Pagamentos instantâneos</li>
-        </ul>
-
-      </div>
-
-    </div>
-
-    <div class="slide-number">03</div>
-  </section>
-
-  <!-- Slide 4 -->
-  <section class="slide">
-
-    <div class="floating-circle circle1"></div>
-    <div class="floating-circle circle2"></div>
-
-    <div class="center">
-
-      <div class="glass" style="max-width:900px;">
-
-        <h1 class="title">Inovação + Segurança</h1>
-
-        <p class="description" style="margin:auto;">
-          A PayNow foi projetada para oferecer uma experiência premium
-          para MEIs e profissionais autônomos, combinando tecnologia financeira,
-          praticidade operacional e segurança digital em uma única plataforma.
-        </p>
-
-        <div class="grid" style="margin-top:45px;">
-
-          <div class="card">
-            <i class="fa-solid fa-fingerprint"></i>
-            <h3>Biometria</h3>
-          </div>
-
-          <div class="card">
-            <i class="fa-solid fa-cloud"></i>
-            <h3>Cloud Banking</h3>
-          </div>
-
-          <div class="card">
-            <i class="fa-solid fa-user-shield"></i>
-            <h3>Proteção Avançada</h3>
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="slide-number">04</div>
-  </section>
-
-</div>
-
-<!-- Navegação -->
-<div class="navigation">
-  <button class="nav-btn" onclick="prevSlide()">
-    <i class="fa-solid fa-chevron-left"></i>
-  </button>
-
-  <button class="nav-btn" onclick="nextSlide()">
-    <i class="fa-solid fa-chevron-right"></i>
-  </button>
+    <button class="logout" onclick="logout()">Sair</button>
+  </div>
 </div>
 
 <script>
+  function register() {
+    const name = document.getElementById('registerName').value;
+    const email = document.getElementById('registerEmail').value;
+    const password = document.getElementById('registerPassword').value;
 
-  const slides = document.querySelectorAll('.slide');
-  let currentSlide = 0;
-
-  function showSlide(index){
-
-    slides.forEach(slide => {
-      slide.classList.remove('active','prev');
-    });
-
-    slides[currentSlide].classList.add('prev');
-
-    currentSlide = index;
-
-    if(currentSlide >= slides.length){
-      currentSlide = 0;
+    if (!name || !email || !password) {
+      alert('Preencha todos os campos');
+      return;
     }
 
-    if(currentSlide < 0){
-      currentSlide = slides.length - 1;
-    }
+    const user = {
+      name,
+      email,
+      password,
+      balance: 0
+    };
 
-    slides[currentSlide].classList.add('active');
+    localStorage.setItem(email, JSON.stringify(user));
+
+    alert('Conta criada com sucesso!');
   }
 
-  function nextSlide(){
-    showSlide(currentSlide + 1);
-  }
+  function login() {
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
 
-  function prevSlide(){
-    showSlide(currentSlide - 1);
-  }
+    const user = JSON.parse(localStorage.getItem(email));
 
-  // Navegação por teclado
-  document.addEventListener('keydown', (e)=>{
-
-    if(e.key === 'ArrowRight'){
-      nextSlide();
+    if (!user) {
+      alert('Usuário não encontrado');
+      return;
     }
 
-    if(e.key === 'ArrowLeft'){
-      prevSlide();
+    if (user.password !== password) {
+      alert('Senha incorreta');
+      return;
     }
 
-  });
+    localStorage.setItem('loggedUser', email);
 
+    loadDashboard();
+  }
+
+  function loadDashboard() {
+    const email = localStorage.getItem('loggedUser');
+
+    if (!email) return;
+
+    const user = JSON.parse(localStorage.getItem(email));
+
+    document.getElementById('authArea').classList.add('hidden');
+    document.getElementById('dashboard').classList.remove('hidden');
+
+    document.getElementById('userName').innerText = user.name;
+    document.getElementById('userEmail').innerText = user.email;
+    document.getElementById('userBalance').innerText = user.balance.toFixed(2);
+  }
+
+  function deposit() {
+    const value = Number(document.getElementById('depositValue').value);
+
+    if (value <= 0) {
+      alert('Digite um valor válido');
+      return;
+    }
+
+    const email = localStorage.getItem('loggedUser');
+    const user = JSON.parse(localStorage.getItem(email));
+
+    user.balance += value;
+
+    localStorage.setItem(email, JSON.stringify(user));
+
+    loadDashboard();
+  }
+
+  function withdraw() {
+    const value = Number(document.getElementById('withdrawValue').value);
+
+    const email = localStorage.getItem('loggedUser');
+    const user = JSON.parse(localStorage.getItem(email));
+
+    if (value > user.balance) {
+      alert('Saldo insuficiente');
+      return;
+    }
+
+    user.balance -= value;
+
+    localStorage.setItem(email, JSON.stringify(user));
+
+    loadDashboard();
+  }
+
+  function logout() {
+    localStorage.removeItem('loggedUser');
+    location.reload();
+  }
+
+  loadDashboard();
 </script>
 
 </body>

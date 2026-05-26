@@ -1,89 +1,373 @@
-// package.json
-{
-  "name": "paynow",
-  "private": true,
-  "version": "1.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build"
-  },
-  "dependencies": {
-    "framer-motion": "^12.0.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
-  },
-  "devDependencies": {
-    "@vitejs/plugin-react": "^5.0.0",
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.5.3",
-    "tailwindcss": "^3.4.17",
-    "vite": "^6.0.0"
-  }
-}
+// PAYNOW BANK — SISTEMA BANCÁRIO DIGITAL COMPLETO
+// STACK:
+// React + Vite + Tailwind + Framer Motion + React Router
+// Node.js + Express + MongoDB + JWT
+// Projeto Fullstack em um único código-base
 
-// vite.config.js
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+// ============================================
+// 📦 FRONTEND — src/main.jsx
+// ============================================
 
-export default defineConfig({
-  plugins: [react()]
-});
-
-// tailwind.config.js
-export default {
-  content: ["./index.html","./src/**/*.{js,jsx}"],
-  theme: { extend: {} },
-  plugins: [],
-};
-
-// postcss.config.js
-export default {
-  plugins: {
-    tailwindcss: {},
-    autoprefixer: {},
-  },
-};
-
-// index.html
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>PayNow</title>
-</head>
-<body>
-<div id="root"></div>
-<script type="module" src="/src/main.jsx"></script>
-</body>
-</html>
-
-// src/main.jsx
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 import App from "./App";
-import "./index.css";
+import "./styles/global.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-<React.StrictMode>
-<App />
-</React.StrictMode>
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
 );
 
-// src/index.css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+// ============================================
+// 📦 FRONTEND — src/App.jsx
+// ============================================
 
-body{
-margin:0;
-font-family:Arial,sans-serif;
+import { Routes, Route, Navigate } from "react-router-dom";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
+import Pix from "./pages/Pix";
+import Extract from "./pages/Extract";
+import Profile from "./pages/Profile";
+import ScrumBoard from "./pages/ScrumBoard";
+
+export default function App() {
+
+  const token = localStorage.getItem("token");
+
+  return (
+    <Routes>
+
+      <Route path="/" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+
+      {token ? (
+        <>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/pix" element={<Pix />} />
+          <Route path="/extract" element={<Extract />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/scrum" element={<ScrumBoard />} />
+        </>
+      ) : (
+        <Route path="*" element={<Navigate to="/" />} />
+      )}
+
+    </Routes>
+  );
 }
 
-// src/App.jsx
-COLE AQUI EXATAMENTE O CÓDIGO GIGANTE QUE VOCÊ MANDOU
+// ============================================
+// 📦 FRONTEND — src/services/api.js
+// ============================================
 
-// terminal
-npm install
-npm run dev
+import axios from "axios";
+
+const api = axios.create({
+  baseURL: "http://localhost:5000/api",
+});
+
+api.interceptors.request.use((config) => {
+
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    config.headers.Authorization = token;
+  }
+
+  return config;
+});
+
+export default api;
+
+// ============================================
+// 📦 FRONTEND — src/pages/Login.jsx
+// ============================================
+
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import api from "../services/api";
+import { motion } from "framer-motion";
+
+export default function Login() {
+
+  const navigate = useNavigate();
+
+  const [form, setForm] = useState({
+    email: "",
+    password: ""
+  });
+
+  async function handleLogin(e) {
+
+    e.preventDefault();
+
+    try {
+
+      const response = await api.post("/auth/login", form);
+
+      localStorage.setItem("token", response.data.token);
+
+      navigate("/dashboard");
+
+    } catch {
+
+      alert("Login inválido");
+
+    }
+  }
+
+  return (
+
+    <div className="min-h-screen flex items-center justify-center bg-[#050816]">
+
+      <motion.form
+        onSubmit={handleLogin}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="glass w-[400px] p-10 rounded-3xl shadow-neon"
+      >
+
+        <h1 className="text-5xl text-primary font-bordone mb-8">
+          PayNow Bank
+        </h1>
+
+        <input
+          type="email"
+          placeholder="E-mail"
+          className="input"
+          onChange={(e) =>
+            setForm({ ...form, email: e.target.value })
+          }
+        />
+
+        <input
+          type="password"
+          placeholder="Senha"
+          className="input"
+          onChange={(e) =>
+            setForm({ ...form, password: e.target.value })
+          }
+        />
+
+        <button className="btn-primary">
+          Entrar
+        </button>
+
+        <Link
+          to="/register"
+          className="text-primary mt-4 block"
+        >
+          Criar conta
+        </Link>
+
+      </motion.form>
+
+    </div>
+  );
+}
+
+// ============================================
+// 📦 FRONTEND — src/pages/Register.jsx
+// ============================================
+
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../services/api";
+
+export default function Register() {
+
+  const navigate = useNavigate();
+
+  const [form, setForm] = useState({
+    name: "",
+    cpf: "",
+    phone: "",
+    email: "",
+    password: ""
+  });
+
+  async function handleRegister(e) {
+
+    e.preventDefault();
+
+    await api.post("/auth/register", form);
+
+    alert("Conta criada");
+
+    navigate("/");
+  }
+
+  return (
+
+    <div className="screen">
+
+      <form onSubmit={handleRegister} className="glass card">
+
+        <h1 className="title">
+          Criar Conta
+        </h1>
+
+        <input
+          placeholder="Nome"
+          className="input"
+          onChange={(e)=>
+            setForm({...form,name:e.target.value})
+          }
+        />
+
+        <input
+          placeholder="CPF"
+          className="input"
+          onChange={(e)=>
+            setForm({...form,cpf:e.target.value})
+          }
+        />
+
+        <input
+          placeholder="Telefone"
+          className="input"
+          onChange={(e)=>
+            setForm({...form,phone:e.target.value})
+          }
+        />
+
+        <input
+          placeholder="Email"
+          className="input"
+          onChange={(e)=>
+            setForm({...form,email:e.target.value})
+          }
+        />
+
+        <input
+          type="password"
+          placeholder="Senha"
+          className="input"
+          onChange={(e)=>
+            setForm({...form,password:e.target.value})
+          }
+        />
+
+        <button className="btn-primary">
+          Criar Conta
+        </button>
+
+      </form>
+
+    </div>
+  );
+}
+
+// ============================================
+// 📦 FRONTEND — src/pages/Dashboard.jsx
+// ============================================
+
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+
+export default function Dashboard() {
+
+  return (
+
+    <div className="min-h-screen bg-[#050816] p-8 text-white">
+
+      <div className="flex justify-between">
+
+        <h1 className="text-5xl font-bordone text-primary">
+          Dashboard
+        </h1>
+
+        <button
+          onClick={()=>{
+            localStorage.clear();
+            location.href="/";
+          }}
+          className="btn-primary"
+        >
+          Logout
+        </button>
+
+      </div>
+
+      <motion.div
+        initial={{ opacity:0,y:20 }}
+        animate={{ opacity:1,y:0 }}
+        className="glass rounded-3xl p-10 mt-10"
+      >
+
+        <h2 className="text-2xl">
+          Saldo Atual
+        </h2>
+
+        <p className="text-6xl font-bold text-primary mt-4">
+          R$ 12.580,00
+        </p>
+
+      </motion.div>
+
+      <div className="grid md:grid-cols-3 gap-6 mt-10">
+
+        <Link to="/pix" className="glass p-6 rounded-3xl">
+          💸 Área Pix
+        </Link>
+
+        <Link to="/extract" className="glass p-6 rounded-3xl">
+          📊 Extrato
+        </Link>
+
+        <Link to="/profile" className="glass p-6 rounded-3xl">
+          👤 Perfil
+        </Link>
+
+      </div>
+
+      <div className="mt-10">
+        <Link
+          to="/scrum"
+          className="btn-primary"
+        >
+          Abrir Scrum Board
+        </Link>
+      </div>
+
+    </div>
+  );
+}
+
+// ============================================
+// 📦 FRONTEND — src/pages/Pix.jsx
+// ============================================
+
+import { useState } from "react";
+import api from "../services/api";
+
+export default function Pix() {
+
+  const [form, setForm] = useState({
+    pixKey:"",
+    value:"",
+    description:""
+  });
+
+  async function sendPix(e){
+
+    e.preventDefault();
+
+    try{
+
+      const response = await api.post(
+        "/pix/send",
+        form
+      );
+
+      alert(response.data.message);
+
+    }catch(error){
+
+      alert(error.response.data.message);
+
+    }
+  }

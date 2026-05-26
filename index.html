@@ -1,404 +1,686 @@
-import React, { useState } from "react";
-import { motion } from "framer-motion";
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-export default function PayNowApp() {
+  <title>PayNow Presentation</title>
 
-  const [screen, setScreen] = useState("login");
-  const [saldo, setSaldo] = useState(12450);
-  const [pixKey, setPixKey] = useState("");
-  const [pixValue, setPixValue] = useState("");
-  const [message, setMessage] = useState("");
+  <!-- Fontes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  const [transactions, setTransactions] = useState([
-    {
-      id: 1,
-      type: "Entrada",
-      value: 2500,
-      date: "26/05/2026"
-    },
-    {
-      id: 2,
-      type: "Saída",
-      value: 120,
-      date: "25/05/2026"
-    }
-  ]);
+  <!-- Bordone alternativa elegante -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-  function handlePix() {
+  <!-- Ícones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
-    if (!pixKey || !pixValue) {
-      setMessage("Preencha todos os campos.");
-      return;
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
     }
 
-    const value = Number(pixValue);
-
-    if (value > saldo) {
-      setMessage("Saldo insuficiente.");
-      return;
+    :root{
+      --turquoise:#00d1c7;
+      --turquoise-dark:#0097a7;
+      --black:#0f0f0f;
+      --white:#ffffff;
+      --glass:rgba(255,255,255,0.08);
+      --border:rgba(255,255,255,0.12);
     }
 
-    setSaldo(saldo - value);
+    body{
+      background:linear-gradient(135deg,#031414,#071f23,#041111);
+      color:white;
+      font-family:'Inter',sans-serif;
+      overflow-x:hidden;
+    }
 
-    setTransactions([
-      {
-        id: Date.now(),
-        type: "Pix enviado",
-        value,
-        date: "Hoje"
-      },
-      ...transactions
-    ]);
+    body::before{
+      content:'';
+      position:fixed;
+      width:600px;
+      height:600px;
+      background:radial-gradient(circle,var(--turquoise),transparent 70%);
+      top:-250px;
+      right:-150px;
+      opacity:.15;
+      filter:blur(50px);
+      z-index:-1;
+    }
 
-    setMessage("Pix enviado com sucesso!");
-    setPixKey("");
-    setPixValue("");
-  }
+    body::after{
+      content:'';
+      position:fixed;
+      width:500px;
+      height:500px;
+      background:radial-gradient(circle,var(--turquoise-dark),transparent 70%);
+      bottom:-250px;
+      left:-150px;
+      opacity:.12;
+      filter:blur(60px);
+      z-index:-1;
+    }
 
-  return (
+    .slide{
+      width:100%;
+      min-height:100vh;
+      padding:70px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      position:relative;
+    }
 
-    <div className="min-h-screen bg-gradient-to-br from-[#02141a] via-[#062a33] to-[#00b7b7] text-white p-6">
+    .glass{
+      background:var(--glass);
+      border:1px solid var(--border);
+      backdrop-filter:blur(16px);
+      border-radius:28px;
+      padding:30px;
+      box-shadow:
+      0 8px 40px rgba(0,0,0,.35),
+      0 0 30px rgba(0,209,199,.08);
+    }
 
-      {/* HEADER */}
+    .title{
+      font-family:'Playfair Display',serif;
+      font-size:4rem;
+      line-height:1.1;
+      margin-bottom:20px;
+      background:linear-gradient(to right,#fff,#00d1c7);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
 
-      <div className="flex justify-between items-center mb-8">
+    .subtitle{
+      font-family:'Playfair Display',serif;
+      font-size:2rem;
+      margin-bottom:20px;
+      color:var(--turquoise);
+    }
 
-        <div>
-          <h1
-            className="text-5xl font-bold"
-            style={{ fontFamily: "Bodoni, serif" }}
-          >
+    .text{
+      color:rgba(255,255,255,.85);
+      line-height:1.8;
+      font-size:1.05rem;
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:50px;
+      align-items:center;
+    }
+
+    .mockup{
+      width:100%;
+      max-width:350px;
+      height:650px;
+      margin:auto;
+      border-radius:40px;
+      background:linear-gradient(180deg,#101010,#1b1b1b);
+      border:1px solid rgba(255,255,255,.1);
+      padding:25px;
+      box-shadow:
+      0 0 50px rgba(0,209,199,.15);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .mockup::before{
+      content:'';
+      position:absolute;
+      inset:0;
+      background:linear-gradient(
+        180deg,
+        rgba(0,209,199,.15),
+        transparent
+      );
+    }
+
+    .balance{
+      margin-top:40px;
+      font-size:2.5rem;
+      font-weight:700;
+    }
+
+    .card{
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      padding:18px;
+      border-radius:22px;
+      margin-top:20px;
+    }
+
+    .cards{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+      gap:25px;
+      margin-top:40px;
+    }
+
+    .icon{
+      width:65px;
+      height:65px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:18px;
+      background:linear-gradient(
+      135deg,
+      rgba(0,209,199,.3),
+      rgba(255,255,255,.05));
+      color:var(--turquoise);
+      font-size:1.5rem;
+      margin-bottom:18px;
+    }
+
+    .small-title{
+      font-size:1.2rem;
+      font-weight:600;
+      margin-bottom:10px;
+    }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:30px;
+      margin-top:40px;
+    }
+
+    .list{
+      margin-top:20px;
+    }
+
+    .list li{
+      margin-bottom:12px;
+      color:rgba(255,255,255,.85);
+      list-style:none;
+    }
+
+    .list li::before{
+      content:'✓';
+      color:var(--turquoise);
+      margin-right:10px;
+      font-weight:bold;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:20px;
+      margin-top:40px;
+    }
+
+    .stat-box{
+      text-align:center;
+      padding:25px;
+      border-radius:24px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .number{
+      font-size:2.4rem;
+      font-weight:700;
+      color:var(--turquoise);
+    }
+
+    .footer{
+      margin-top:40px;
+      color:rgba(255,255,255,.5);
+      font-size:.9rem;
+    }
+
+    .neon-line{
+      width:120px;
+      height:4px;
+      border-radius:50px;
+      background:linear-gradient(
+      to right,
+      var(--turquoise),
+      transparent);
+      margin:20px 0;
+    }
+
+    @media(max-width:900px){
+
+      .hero{
+        grid-template-columns:1fr;
+      }
+
+      .title{
+        font-size:2.8rem;
+      }
+
+      .slide{
+        padding:30px;
+      }
+
+      .grid-2{
+        grid-template-columns:1fr;
+      }
+
+      .stats{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Slide 1 -->
+  <section class="slide">
+
+    <div class="hero">
+
+      <div>
+        <div class="glass">
+
+          <h1 class="title">
             PayNow
           </h1>
 
-          <p className="text-cyan-100 mt-2">
-            Conta Digital e Meios de Pagamento
-          </p>
-        </div>
+          <div class="neon-line"></div>
 
-        <button
-          onClick={() => setScreen("dashboard")}
-          className="bg-cyan-300 text-black px-5 py-3 rounded-2xl font-bold hover:scale-105 transition"
-        >
-          Dashboard
-        </button>
+          <h2 class="subtitle">
+            Conta Digital e Meios de Pagamento
+          </h2>
+
+          <p class="text">
+            Soluções financeiras inteligentes para
+            MEIs e autônomos com praticidade,
+            segurança e tecnologia premium.
+          </p>
+
+          <div class="cards">
+
+            <div class="card">
+              <i class="fa-solid fa-qrcode"></i>
+              Pix Instantâneo
+            </div>
+
+            <div class="card">
+              <i class="fa-solid fa-shield-halved"></i>
+              Segurança Digital
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <div>
+
+        <div class="mockup">
+
+          <h3>Saldo disponível</h3>
+
+          <div class="balance">
+            R$ 12.450,90
+          </div>
+
+          <div class="card">
+            <p>Transferência recebida</p>
+            <strong>+ R$ 2.400,00</strong>
+          </div>
+
+          <div class="card">
+            <p>Pix enviado</p>
+            <strong>- R$ 180,00</strong>
+          </div>
+
+          <div class="card">
+            <p>Cartão virtual ativo</p>
+            <strong>Proteção total</strong>
+          </div>
+
+        </div>
 
       </div>
 
-      {/* LOGIN */}
+    </div>
 
-      {screen === "login" && (
+  </section>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="max-w-md mx-auto bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20 shadow-2xl"
-        >
+  <!-- Slide 2 -->
+  <section class="slide">
 
-          <h2
-            className="text-4xl mb-6 text-cyan-300"
-            style={{ fontFamily: "Bodoni, serif" }}
-          >
-            Login
-          </h2>
+    <div class="glass">
 
-          <input
-            type="text"
-            placeholder="CPF ou E-mail"
-            className="w-full p-4 rounded-xl bg-white/10 border border-white/20 mb-4 outline-none"
-          />
+      <h1 class="title">
+        Sobre a Fintech
+      </h1>
 
-          <input
-            type="password"
-            placeholder="Senha"
-            className="w-full p-4 rounded-xl bg-white/10 border border-white/20 mb-6 outline-none"
-          />
+      <div class="neon-line"></div>
 
-          <button
-            onClick={() => setScreen("dashboard")}
-            className="w-full bg-cyan-300 text-black font-bold p-4 rounded-xl hover:scale-105 transition"
-          >
-            Entrar
-          </button>
+      <div class="cards">
 
-          <button
-            onClick={() => setScreen("register")}
-            className="w-full mt-4 border border-cyan-300 text-cyan-300 p-4 rounded-xl"
-          >
-            Criar Conta
-          </button>
-
-        </motion.div>
-
-      )}
-
-      {/* REGISTER */}
-
-      {screen === "register" && (
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="max-w-lg mx-auto bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20"
-        >
-
-          <h2
-            className="text-4xl mb-6 text-cyan-300"
-            style={{ fontFamily: "Bodoni, serif" }}
-          >
-            Cadastro
-          </h2>
-
-          <div className="grid gap-4">
-
-            <input
-              placeholder="Nome Completo"
-              className="p-4 rounded-xl bg-white/10 border border-white/20"
-            />
-
-            <input
-              placeholder="CPF"
-              className="p-4 rounded-xl bg-white/10 border border-white/20"
-            />
-
-            <input
-              placeholder="Telefone"
-              className="p-4 rounded-xl bg-white/10 border border-white/20"
-            />
-
-            <input
-              placeholder="E-mail"
-              className="p-4 rounded-xl bg-white/10 border border-white/20"
-            />
-
-            <input
-              type="password"
-              placeholder="Senha"
-              className="p-4 rounded-xl bg-white/10 border border-white/20"
-            />
-
+        <div class="card">
+          <div class="icon">
+            <i class="fa-solid fa-building-columns"></i>
           </div>
 
-          <button
-            onClick={() => setScreen("dashboard")}
-            className="w-full mt-6 bg-cyan-300 text-black font-bold p-4 rounded-xl"
-          >
-            Criar Conta
-          </button>
-
-        </motion.div>
-
-      )}
-
-      {/* DASHBOARD */}
-
-      {screen === "dashboard" && (
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
-
-          {/* CARDS */}
-
-          <div className="grid md:grid-cols-3 gap-6">
-
-            <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-6 border border-white/20">
-
-              <h3 className="text-cyan-300 text-xl mb-3">
-                💰 Saldo Atual
-              </h3>
-
-              <p className="text-4xl font-bold">
-                R$ {saldo}
-              </p>
-
-            </div>
-
-            <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-6 border border-white/20">
-
-              <h3 className="text-cyan-300 text-xl mb-3">
-                🔐 Segurança
-              </h3>
-
-              <p>2FA Ativado</p>
-              <p>Criptografia TLS</p>
-
-            </div>
-
-            <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-6 border border-white/20">
-
-              <h3 className="text-cyan-300 text-xl mb-3">
-                📊 Dashboard
-              </h3>
-
-              <p>Entradas e saídas em tempo real.</p>
-
-            </div>
-
+          <div class="small-title">
+            Conta Digital
           </div>
 
-          {/* PIX */}
+          <p class="text">
+            Plataforma financeira moderna para pequenos empreendedores.
+          </p>
+        </div>
 
-          <div className="mt-10 bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20">
-
-            <h2
-              className="text-4xl text-cyan-300 mb-6"
-              style={{ fontFamily: "Bodoni, serif" }}
-            >
-              Área Pix
-            </h2>
-
-            <div className="grid md:grid-cols-2 gap-4">
-
-              <input
-                value={pixKey}
-                onChange={(e) => setPixKey(e.target.value)}
-                placeholder="Chave Pix"
-                className="p-4 rounded-xl bg-white/10 border border-white/20"
-              />
-
-              <input
-                value={pixValue}
-                onChange={(e) => setPixValue(e.target.value)}
-                placeholder="Valor"
-                className="p-4 rounded-xl bg-white/10 border border-white/20"
-              />
-
-            </div>
-
-            <button
-              onClick={handlePix}
-              className="mt-6 bg-cyan-300 text-black font-bold px-8 py-4 rounded-xl hover:scale-105 transition"
-            >
-              Enviar Pix
-            </button>
-
-            {message && (
-              <p className="mt-4 text-cyan-200">
-                {message}
-              </p>
-            )}
-
+        <div class="card">
+          <div class="icon">
+            <i class="fa-solid fa-users"></i>
           </div>
 
-          {/* TRANSAÇÕES */}
-
-          <div className="mt-10 bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20">
-
-            <h2
-              className="text-4xl text-cyan-300 mb-6"
-              style={{ fontFamily: "Bodoni, serif" }}
-            >
-              Histórico
-            </h2>
-
-            <div className="space-y-4">
-
-              {transactions.map((item) => (
-
-                <div
-                  key={item.id}
-                  className="flex justify-between bg-white/5 p-4 rounded-2xl"
-                >
-
-                  <div>
-                    <p className="font-bold">
-                      {item.type}
-                    </p>
-
-                    <p className="text-sm text-cyan-100">
-                      {item.date}
-                    </p>
-                  </div>
-
-                  <p className="font-bold">
-                    R$ {item.value}
-                  </p>
-
-                </div>
-
-              ))}
-
-            </div>
-
+          <div class="small-title">
+            Público-Alvo
           </div>
 
-          {/* SCRUM */}
+          <p class="text">
+            MEIs, autônomos e profissionais independentes.
+          </p>
+        </div>
 
-          <div className="mt-10 bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20">
-
-            <h2
-              className="text-4xl text-cyan-300 mb-8"
-              style={{ fontFamily: "Bodoni, serif" }}
-            >
-              Scrum Board
-            </h2>
-
-            <div className="grid md:grid-cols-3 gap-6">
-
-              <div className="bg-black/20 rounded-2xl p-5">
-
-                <h3 className="text-2xl mb-4">
-                  📌 To Do
-                </h3>
-
-                <div className="space-y-3">
-
-                  <div className="bg-white/10 p-4 rounded-xl">
-                    US01 — Login 2FA
-                  </div>
-
-                  <div className="bg-white/10 p-4 rounded-xl">
-                    US02 — Cadastro KYC
-                  </div>
-
-                </div>
-
-              </div>
-
-              <div className="bg-black/20 rounded-2xl p-5">
-
-                <h3 className="text-2xl mb-4">
-                  ⚙ Doing
-                </h3>
-
-                <div className="space-y-3">
-
-                  <div className="bg-white/10 p-4 rounded-xl">
-                    US03 — Integração Pix
-                  </div>
-
-                </div>
-
-              </div>
-
-              <div className="bg-black/20 rounded-2xl p-5">
-
-                <h3 className="text-2xl mb-4">
-                  ✅ Done
-                </h3>
-
-                <div className="space-y-3">
-
-                  <div className="bg-white/10 p-4 rounded-xl">
-                    Dashboard Financeiro
-                  </div>
-
-                </div>
-
-              </div>
-
-            </div>
-
+        <div class="card">
+          <div class="icon">
+            <i class="fa-solid fa-chart-line"></i>
           </div>
 
-        </motion.div>
+          <div class="small-title">
+            Crescimento
+          </div>
 
-      )}
+          <p class="text">
+            Gestão financeira simplificada com foco em produtividade.
+          </p>
+        </div>
+
+      </div>
 
     </div>
 
-  );
+  </section>
 
-}
+  <!-- Slide 3 -->
+  <section class="slide">
+
+    <div class="glass">
+
+      <h1 class="title">
+        Problemas do Mercado
+      </h1>
+
+      <div class="neon-line"></div>
+
+      <div class="grid-2">
+
+        <div>
+
+          <ul class="list">
+            <li>Burocracia bancária</li>
+            <li>Taxas elevadas</li>
+            <li>Dificuldade na gestão financeira</li>
+            <li>Experiência ruim do usuário</li>
+          </ul>
+
+        </div>
+
+        <div class="card">
+
+          <div class="icon">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+          </div>
+
+          <h3 class="small-title">
+            Cenário Atual
+          </h3>
+
+          <p class="text">
+            Pequenos empreendedores enfrentam processos lentos e serviços financeiros pouco intuitivos.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- Slide 4 -->
+  <section class="slide">
+
+    <div class="glass">
+
+      <h1 class="title">
+        Solução PayNow
+      </h1>
+
+      <div class="cards">
+
+        <div class="card">
+          <i class="fa-solid fa-bolt"></i>
+          <h3 class="small-title">Pix Instantâneo</h3>
+        </div>
+
+        <div class="card">
+          <i class="fa-solid fa-barcode"></i>
+          <h3 class="small-title">Boletos</h3>
+        </div>
+
+        <div class="card">
+          <i class="fa-solid fa-credit-card"></i>
+          <h3 class="small-title">Cartão Virtual</h3>
+        </div>
+
+        <div class="card">
+          <i class="fa-solid fa-chart-pie"></i>
+          <h3 class="small-title">Dashboard Financeiro</h3>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- Slide 5 -->
+  <section class="slide">
+
+    <div class="glass">
+
+      <h1 class="title">
+        Diferenciais
+      </h1>
+
+      <div class="stats">
+
+        <div class="stat-box">
+          <div class="number">24h</div>
+          <p>Suporte humanizado</p>
+        </div>
+
+        <div class="stat-box">
+          <div class="number">2FA</div>
+          <p>Autenticação segura</p>
+        </div>
+
+        <div class="stat-box">
+          <div class="number">0%</div>
+          <p>Burocracia desnecessária</p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- Slide 6 -->
+  <section class="slide">
+
+    <div class="glass">
+
+      <h1 class="title">
+        Segurança Digital
+      </h1>
+
+      <div class="grid-2">
+
+        <div class="card">
+
+          <div class="icon">
+            <i class="fa-solid fa-lock"></i>
+          </div>
+
+          <h3 class="small-title">
+            Criptografia Avançada
+          </h3>
+
+          <p class="text">
+            Proteção total de dados financeiros.
+          </p>
+
+        </div>
+
+        <div class="card">
+
+          <div class="icon">
+            <i class="fa-solid fa-fingerprint"></i>
+          </div>
+
+          <h3 class="small-title">
+            LGPD & Segurança
+          </h3>
+
+          <p class="text">
+            Conformidade completa com proteção de dados.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- Slide 7 -->
+  <section class="slide">
+
+    <div class="glass">
+
+      <h1 class="title">
+        Experiência do Usuário
+      </h1>
+
+      <p class="text">
+        Interface intuitiva inspirada nos melhores aplicativos financeiros do mercado.
+      </p>
+
+      <div class="cards">
+
+        <div class="card">
+          Dashboard inteligente
+        </div>
+
+        <div class="card">
+          Navegação simplificada
+        </div>
+
+        <div class="card">
+          Design responsivo
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- Slide 8 -->
+  <section class="slide">
+
+    <div class="glass">
+
+      <h1 class="title">
+        Modelo de Negócio
+      </h1>
+
+      <div class="cards">
+
+        <div class="card">
+          Assinaturas Premium
+        </div>
+
+        <div class="card">
+          Taxas reduzidas
+        </div>
+
+        <div class="card">
+          Serviços financeiros
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- Slide 9 -->
+  <section class="slide">
+
+    <div class="glass">
+
+      <h1 class="title">
+        Impacto e Benefícios
+      </h1>
+
+      <ul class="list">
+        <li>Inclusão financeira</li>
+        <li>Mais produtividade</li>
+        <li>Economia de tempo</li>
+        <li>Facilidade para empreender</li>
+      </ul>
+
+    </div>
+
+  </section>
+
+  <!-- Slide 10 -->
+  <section class="slide">
+
+    <div class="glass">
+
+      <h1 class="title">
+        Obrigado!
+      </h1>
+
+      <div class="neon-line"></div>
+
+      <h2 class="subtitle">
+        PayNow
+      </h2>
+
+      <p class="text">
+        Tecnologia financeira simplificando o futuro dos negócios.
+      </p>
+
+      <div class="footer">
+        contato@paynow.com.br • @paynow
+      </div>
+
+    </div>
+
+  </section>
+
+</body>
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PayNow Fintech</title>
+
+  <!-- Fonte Bordone -->
+  <link href="https://fonts.cdnfonts.com/css/bodoni" rel="stylesheet">
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #02191f, #06313d, #00b7b7);
+      color: white;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .container{
+      width: 90%;
+      max-width: 1200px;
+      margin: auto;
+      padding: 40px 0;
+    }
+
+    .hero{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:40px;
+      flex-wrap:wrap;
+      min-height:90vh;
+    }
+
+    .text{
+      flex:1;
+    }
+
+    .title{
+      font-family: 'Bodoni', serif;
+      font-size: 5rem;
+      color:#7ffcff;
+      margin-bottom:20px;
+      letter-spacing:2px;
+      text-shadow: 0 0 20px rgba(127,252,255,0.6);
+    }
+
+    .subtitle{
+      font-size:1.4rem;
+      color:#d9ffff;
+      margin-bottom:30px;
+      line-height:1.6;
+      max-width:650px;
+    }
+
+    .buttons{
+      display:flex;
+      gap:20px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      padding:15px 35px;
+      border:none;
+      border-radius:15px;
+      font-size:1rem;
+      cursor:pointer;
+      transition:0.3s;
+      font-weight:bold;
+    }
+
+    .btn-primary{
+      background:#7ffcff;
+      color:#02191f;
+      box-shadow:0 0 20px rgba(127,252,255,0.5);
+    }
+
+    .btn-primary:hover{
+      transform:translateY(-4px);
+      box-shadow:0 0 30px rgba(127,252,255,0.8);
+    }
+
+    .btn-secondary{
+      background:transparent;
+      border:2px solid #7ffcff;
+      color:#7ffcff;
+    }
+
+    .btn-secondary:hover{
+      background:#7ffcff;
+      color:#02191f;
+    }
+
+    .card-area{
+      flex:1;
+      display:flex;
+      justify-content:center;
+    }
+
+    .glass-card{
+      width:350px;
+      padding:35px;
+      border-radius:30px;
+      background:rgba(255,255,255,0.08);
+      backdrop-filter: blur(15px);
+      border:1px solid rgba(255,255,255,0.2);
+      box-shadow:0 8px 32px rgba(0,0,0,0.3);
+    }
+
+    .card-title{
+      font-family:'Bodoni', serif;
+      font-size:2rem;
+      color:#7ffcff;
+      margin-bottom:25px;
+    }
+
+    .info{
+      margin-bottom:20px;
+    }
+
+    .info h3{
+      color:#7ffcff;
+      margin-bottom:8px;
+      font-size:1rem;
+    }
+
+    .info p{
+      color:#ffffff;
+      opacity:0.9;
+    }
+
+    .features{
+      margin-top:80px;
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:25px;
+    }
+
+    .feature-card{
+      background:rgba(255,255,255,0.07);
+      padding:30px;
+      border-radius:25px;
+      backdrop-filter: blur(10px);
+      transition:0.3s;
+      border:1px solid rgba(255,255,255,0.1);
+    }
+
+    .feature-card:hover{
+      transform:translateY(-8px);
+      box-shadow:0 0 25px rgba(127,252,255,0.3);
+    }
+
+    .feature-card h2{
+      font-family:'Bodoni', serif;
+      color:#7ffcff;
+      margin-bottom:15px;
+    }
+
+    .feature-card p{
+      line-height:1.6;
+      color:#e8ffff;
+    }
+
+    .glow{
+      position:absolute;
+      width:400px;
+      height:400px;
+      background:#00ffff33;
+      border-radius:50%;
+      filter:blur(100px);
+      z-index:-1;
+    }
+
+    .glow1{
+      top:-100px;
+      left:-100px;
+    }
+
+    .glow2{
+      bottom:-100px;
+      right:-100px;
+    }
+
+    @media(max-width:768px){
+
+      .title{
+        font-size:3.2rem;
+      }
+
+      .subtitle{
+        font-size:1.1rem;
+      }
+
+      .hero{
+        text-align:center;
+      }
+
+      .buttons{
+        justify-content:center;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="glow glow1"></div>
+<div class="glow glow2"></div>
+
+<div class="container">
+
+  <section class="hero">
+
+    <div class="text">
+
+      <h1 class="title">PayNow</h1>
+
+      <p class="subtitle">
+        Conta Digital e Meios de Pagamento para MEIs e Autônomos.
+        Uma fintech moderna focada em inovação, segurança e praticidade financeira.
+      </p>
+
+      <div class="buttons">
+        <button class="btn btn-primary">Abrir Conta</button>
+        <button class="btn btn-secondary">Saiba Mais</button>
+      </div>
+
+    </div>
+
+    <div class="card-area">
+
+      <div class="glass-card">
+
+        <h2 class="card-title">Dashboard</h2>
+
+        <div class="info">
+          <h3>Saldo Atual</h3>
+          <p>R$ 12.450,00</p>
+        </div>
+
+        <div class="info">
+          <h3>Pix Recebidos</h3>
+          <p>+ R$ 4.300,00</p>
+        </div>
+
+        <div class="info">
+          <h3>Transferências</h3>
+          <p>18 realizadas hoje</p>
+        </div>
+
+        <div class="info">
+          <h3>Segurança</h3>
+          <p>2FA + Criptografia TLS</p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <section class="features">
+
+    <div class="feature-card">
+      <h2>Pix Inteligente</h2>
+      <p>
+        Transferências instantâneas com QR Code,
+        geração de chave Pix e notificações em tempo real.
+      </p>
+    </div>
+
+    <div class="feature-card">
+      <h2>Segurança Bancária</h2>
+      <p>
+        Proteção avançada com autenticação em dois fatores,
+        logs de auditoria e criptografia financeira.
+      </p>
+    </div>
+
+    <div class="feature-card">
+      <h2>Dashboard Financeiro</h2>
+      <p>
+        Controle total do fluxo de caixa com gráficos,
+        extratos e relatórios inteligentes.
+      </p>
+    </div>
+
+  </section>
+
+</div>
+
+</body>
+</html>

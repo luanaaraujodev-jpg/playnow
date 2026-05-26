@@ -3,316 +3,233 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>PayNow Bank</title>
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial, sans-serif;
     }
 
-    body {
-      background: linear-gradient(135deg, #041C32, #04293A);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
+    body{
+      background:linear-gradient(135deg,#041C32,#04293A);
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      color:white;
     }
 
-    .container {
-      width: 400px;
-      background: rgba(255,255,255,0.08);
-      padding: 30px;
-      border-radius: 20px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    .container{
+      width:420px;
+      background:rgba(255,255,255,0.08);
+      padding:30px;
+      border-radius:20px;
+      backdrop-filter:blur(10px);
+      box-shadow:0 0 25px rgba(0,0,0,0.4);
     }
 
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: #00E5FF;
+    h1{
+      text-align:center;
+      color:#00E5FF;
+      margin-bottom:20px;
     }
 
-    h2 {
-      margin-bottom: 10px;
+    h2{
+      margin-bottom:10px;
+      font-size:20px;
     }
 
-    input {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 10px;
-      border: none;
-      border-radius: 10px;
+    input{
+      width:100%;
+      padding:12px;
+      margin-bottom:12px;
+      border:none;
+      border-radius:10px;
+      outline:none;
     }
 
-    button {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      background: #00E5FF;
-      color: black;
-      font-weight: bold;
-      cursor: pointer;
-      margin-bottom: 10px;
+    button{
+      width:100%;
+      padding:12px;
+      border:none;
+      border-radius:10px;
+      background:#00E5FF;
+      color:black;
+      font-weight:bold;
+      cursor:pointer;
+      transition:0.3s;
+      margin-bottom:10px;
     }
 
-    button:hover {
-      opacity: 0.9;
+    button:hover{
+      opacity:0.9;
+      transform:scale(1.02);
     }
 
-    .logout {
-      background: crimson;
-      color: white;
+    .logout{
+      background:crimson;
+      color:white;
     }
 
-    .hidden {
-      display: none;
+    .pix{
+      background:#00c853;
+      color:white;
     }
 
-    hr {
-      margin: 20px 0;
-      border: 1px solid rgba(255,255,255,0.1);
+    .card{
+      background:linear-gradient(135deg,#00E5FF,#0066ff);
+      border-radius:20px;
+      padding:20px;
+      margin:20px 0;
+      color:white;
     }
 
-    .actions {
-      margin-top: 15px;
+    .card h3{
+      margin-bottom:20px;
     }
+
+    .saldo{
+      font-size:28px;
+      font-weight:bold;
+      margin-top:10px;
+    }
+
+    .hidden{
+      display:none;
+    }
+
+    hr{
+      margin:20px 0;
+      border:1px solid rgba(255,255,255,0.1);
+    }
+
+    .history{
+      margin-top:20px;
+      max-height:150px;
+      overflow:auto;
+      background:rgba(255,255,255,0.05);
+      padding:10px;
+      border-radius:10px;
+    }
+
+    .history p{
+      margin-bottom:8px;
+      font-size:14px;
+    }
+
+    .info{
+      margin-bottom:8px;
+    }
+
   </style>
 </head>
 <body>
 
 <div class="container">
+
   <h1>PAYNOW BANK</h1>
 
+  <!-- LOGIN E CADASTRO -->
   <div id="authArea">
+
     <h2>Criar Conta</h2>
 
     <input type="text" id="registerName" placeholder="Nome completo">
+
     <input type="email" id="registerEmail" placeholder="Email">
+
     <input type="password" id="registerPassword" placeholder="Senha">
 
-    <button onclick="register()">Criar Conta</button>
+    <button onclick="register()">
+      Criar Conta
+    </button>
 
     <hr>
 
     <h2>Entrar</h2>
 
     <input type="email" id="loginEmail" placeholder="Email">
+
     <input type="password" id="loginPassword" placeholder="Senha">
 
-    <button onclick="login()">Entrar</button>
+    <button onclick="login()">
+      Entrar
+    </button>
+
   </div>
 
+  <!-- DASHBOARD -->
   <div id="dashboard" class="hidden">
-    <h2>Bem-vindo(a)</h2>
 
-    <p><strong>Nome:</strong> <span id="userName"></span></p>
-    <p><strong>Email:</strong> <span id="userEmail"></span></p>
-    <p><strong>Saldo:</strong> R$ <span id="userBalance"></span></p>
+    <div class="card">
+      <h3>Conta Digital</h3>
 
-    <div class="actions">
-      <input type="number" id="depositValue" placeholder="Valor depósito">
-      <button onclick="deposit()">Depositar</button>
+      <p id="cardName">Usuário</p>
+
+      <div class="saldo">
+        R$ <span id="userBalance">0.00</span>
+      </div>
     </div>
 
-    <div class="actions">
-      <input type="number" id="withdrawValue" placeholder="Valor saque">
-      <button onclick="withdraw()">Sacar</button>
+    <div class="info">
+      <strong>Nome:</strong>
+      <span id="userName"></span>
     </div>
 
-    <button class="logout" onclick="logout()">Sair</button>
+    <div class="info">
+      <strong>Email:</strong>
+      <span id="userEmail"></span>
+    </div>
+
+    <hr>
+
+    <!-- DEPÓSITO -->
+    <input type="number" id="depositValue" placeholder="Valor depósito">
+
+    <button onclick="deposit()">
+      Depositar
+    </button>
+
+    <!-- SAQUE -->
+    <input type="number" id="withdrawValue" placeholder="Valor saque">
+
+    <button onclick="withdraw()">
+      Sacar
+    </button>
+
+    <!-- PIX -->
+    <input type="number" id="pixValue" placeholder="Valor PIX">
+
+    <button class="pix" onclick="pixTransfer()">
+      Fazer PIX
+    </button>
+
+    <!-- HISTÓRICO -->
+    <div class="history" id="history">
+      <p>Histórico vazio</p>
+    </div>
+
+    <button class="logout" onclick="logout()">
+      Sair
+    </button>
+
   </div>
+
 </div>
 
 <script>
-  function register() {
-    const name = document.getElementById('registerName').value;
-    const email = document.getElementById('registerEmail').value;
-    const password = document.getElementById('registerPassword').value;
 
-    if (!name || !email || !password) {
-      alert('Preencha todos os campos');
-      return;
-    }
+function register(){
 
-    const user = {
-      name,
-      email,
-      password,
-      balance: 0
-    };
-
-    localStorage.setItem(email, JSON.stringify(user));
-
-    alert('Conta criada com sucesso!');
-  }
-
-  function login() {
-    const email = document.getElementById('loginEmail').value;
-    const password = document.getElementById('loginPassword').value;
-
-    const user = JSON.parse(localStorage.getItem(email));
-
-    if (!user) {
-      alert('Usuário não encontrado');
-      return;
-    }
-
-    if (user.password !== password) {
-      alert('Senha incorreta');
-      return;
-    }
-
-    localStorage.setItem('loggedUser', email);
-
-    loadDashboard();
-  }
-
-  function loadDashboard() {
-    const email = localStorage.getItem('loggedUser');
-
-    if (!email) return;
-
-    const user = JSON.parse(localStorage.getItem(email));
-
-    document.getElementById('authArea').classList.add('hidden');
-    document.getElementById('dashboard').classList.remove('hidden');
-
-    document.getElementById('userName').innerText = user.name;
-    document.getElementById('userEmail').innerText = user.email;
-    document.getElementById('userBalance').innerText = user.balance.toFixed(2);
-  }
-
-  function deposit() {
-    const value = Number(document.getElementById('depositValue').value);
-
-    if (value <= 0) {
-      alert('Digite um valor válido');
-      return;
-    }
-
-    const email = localStorage.getItem('loggedUser');
-    const user = JSON.parse(localStorage.getItem(email));
-
-    user.balance += value;
-
-    localStorage.setItem(email, JSON.stringify(user));
-
-    loadDashboard();
-  }
-
-  function withdraw() {
-    const value = Number(document.getElementById('withdrawValue').value);
-
-    const email = localStorage.getItem('loggedUser');
-    const user = JSON.parse(localStorage.getItem(email));
-
-    if (value > user.balance) {
-      alert('Saldo insuficiente');
-      return;
-    }
-
-    user.balance -= value;
-
-    localStorage.setItem(email, JSON.stringify(user));
-
-    loadDashboard();
-  }
-
-  function logout() {
-    localStorage.removeItem('loggedUser');
-    location.reload();
-  }
-
-  loadDashboard();
-
- {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-}
-
-body {
-  background: linear-gradient(135deg, #041C32, #04293A);
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-}
-
-.container {
-  width: 400px;
-  background: rgba(255,255,255,0.08);
-  padding: 30px;
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 0 20px rgba(0,0,0,0.3);
-}
-
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #00E5FF;
-}
-
-h2 {
-  margin-bottom: 10px;
-}
-
-input {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 10px;
-  border: none;
-  border-radius: 10px;
-}
-
-button {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 10px;
-  background: #00E5FF;
-  color: black;
-  font-weight: bold;
-  cursor: pointer;
-  margin-bottom: 10px;
-}
-
-button:hover {
-  opacity: 0.9;
-}
-
-.logout {
-  background: crimson;
-  color: white;
-}
-
-.hidden {
-  display: none;
-}
-
-hr {
-  margin: 20px 0;
-  border: 1px solid rgba(255,255,255,0.1);
-}
-
-.actions {
-  margin-top: 15px;
-}
-  function register() {
   const name = document.getElementById('registerName').value;
   const email = document.getElementById('registerEmail').value;
   const password = document.getElementById('registerPassword').value;
 
-  if (!name || !email || !password) {
+  if(!name || !email || !password){
     alert('Preencha todos os campos');
     return;
   }
@@ -321,7 +238,8 @@ hr {
     name,
     email,
     password,
-    balance: 0
+    balance: 0,
+    history:[]
   };
 
   localStorage.setItem(email, JSON.stringify(user));
@@ -329,18 +247,19 @@ hr {
   alert('Conta criada com sucesso!');
 }
 
-function login() {
+function login(){
+
   const email = document.getElementById('loginEmail').value;
   const password = document.getElementById('loginPassword').value;
 
   const user = JSON.parse(localStorage.getItem(email));
 
-  if (!user) {
+  if(!user){
     alert('Usuário não encontrado');
     return;
   }
 
-  if (user.password !== password) {
+  if(user.password !== password){
     alert('Senha incorreta');
     return;
   }
@@ -350,65 +269,139 @@ function login() {
   loadDashboard();
 }
 
-function loadDashboard() {
+function loadDashboard(){
+
   const email = localStorage.getItem('loggedUser');
 
-  if (!email) return;
+  if(!email) return;
 
   const user = JSON.parse(localStorage.getItem(email));
 
   document.getElementById('authArea').classList.add('hidden');
+
   document.getElementById('dashboard').classList.remove('hidden');
 
   document.getElementById('userName').innerText = user.name;
+
   document.getElementById('userEmail').innerText = user.email;
-  document.getElementById('userBalance').innerText = user.balance.toFixed(2);
+
+  document.getElementById('cardName').innerText = user.name;
+
+  document.getElementById('userBalance').innerText =
+    user.balance.toFixed(2);
+
+  loadHistory(user.history);
 }
 
-function deposit() {
-  const value = Number(document.getElementById('depositValue').value);
+function deposit(){
 
-  if (value <= 0) {
+  const value =
+    Number(document.getElementById('depositValue').value);
+
+  if(value <= 0){
     alert('Digite um valor válido');
     return;
   }
 
   const email = localStorage.getItem('loggedUser');
-  const user = JSON.parse(localStorage.getItem(email));
+
+  const user =
+    JSON.parse(localStorage.getItem(email));
 
   user.balance += value;
+
+  user.history.push(
+    `💰 Depósito: +R$ ${value.toFixed(2)}`
+  );
 
   localStorage.setItem(email, JSON.stringify(user));
 
   loadDashboard();
 }
 
-function withdraw() {
-  const value = Number(document.getElementById('withdrawValue').value);
+function withdraw(){
+
+  const value =
+    Number(document.getElementById('withdrawValue').value);
 
   const email = localStorage.getItem('loggedUser');
-  const user = JSON.parse(localStorage.getItem(email));
 
-  if (value > user.balance) {
+  const user =
+    JSON.parse(localStorage.getItem(email));
+
+  if(value > user.balance){
     alert('Saldo insuficiente');
     return;
   }
 
   user.balance -= value;
 
+  user.history.push(
+    `🏧 Saque: -R$ ${value.toFixed(2)}`
+  );
+
   localStorage.setItem(email, JSON.stringify(user));
 
   loadDashboard();
 }
 
-function logout() {
+function pixTransfer(){
+
+  const value =
+    Number(document.getElementById('pixValue').value);
+
+  const email = localStorage.getItem('loggedUser');
+
+  const user =
+    JSON.parse(localStorage.getItem(email));
+
+  if(value > user.balance){
+    alert('Saldo insuficiente');
+    return;
+  }
+
+  user.balance -= value;
+
+  user.history.push(
+    `📲 PIX enviado: -R$ ${value.toFixed(2)}`
+  );
+
+  localStorage.setItem(email, JSON.stringify(user));
+
+  loadDashboard();
+}
+
+function loadHistory(history){
+
+  const historyDiv =
+    document.getElementById('history');
+
+  historyDiv.innerHTML = '';
+
+  if(history.length === 0){
+    historyDiv.innerHTML =
+      '<p>Histórico vazio</p>';
+    return;
+  }
+
+  history.reverse().forEach(item => {
+
+    historyDiv.innerHTML += `
+      <p>${item}</p>
+    `;
+  });
+}
+
+function logout(){
+
   localStorage.removeItem('loggedUser');
 
   location.reload();
 }
 
 loadDashboard();
-    </script>
-  
+
+</script>
+
 </body>
 </html>

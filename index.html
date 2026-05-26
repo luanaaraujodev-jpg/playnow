@@ -1,88 +1,404 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+import React, { useState } from "react";
+import { motion } from "framer-motion";
 
-  <title>PayNow - Scrum Fintech</title>
+export default function PayNowApp() {
 
-  <!-- Fonte Bordone -->
-  <link href="https://fonts.cdnfonts.com/css/bodoni" rel="stylesheet">
+  const [screen, setScreen] = useState("login");
+  const [saldo, setSaldo] = useState(12450);
+  const [pixKey, setPixKey] = useState("");
+  const [pixValue, setPixValue] = useState("");
+  const [message, setMessage] = useState("");
 
-  <style>
+  const [transactions, setTransactions] = useState([
+    {
+      id: 1,
+      type: "Entrada",
+      value: 2500,
+      date: "26/05/2026"
+    },
+    {
+      id: 2,
+      type: "Saída",
+      value: 120,
+      date: "25/05/2026"
+    }
+  ]);
 
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
+  function handlePix() {
+
+    if (!pixKey || !pixValue) {
+      setMessage("Preencha todos os campos.");
+      return;
     }
 
-    body{
-      background:
-      linear-gradient(135deg,#02141a,#062a33,#00b7b7);
-      font-family: Arial, sans-serif;
-      color:white;
-      overflow-x:hidden;
+    const value = Number(pixValue);
+
+    if (value > saldo) {
+      setMessage("Saldo insuficiente.");
+      return;
     }
 
-    body::before{
-      content:'';
-      position:fixed;
-      width:600px;
-      height:600px;
-      background:#00ffff25;
-      border-radius:50%;
-      filter:blur(120px);
-      top:-150px;
-      left:-150px;
-      z-index:-1;
-    }
+    setSaldo(saldo - value);
 
-    body::after{
-      content:'';
-      position:fixed;
-      width:500px;
-      height:500px;
-      background:#00fff020;
-      border-radius:50%;
-      filter:blur(120px);
-      bottom:-100px;
-      right:-100px;
-      z-index:-1;
-    }
+    setTransactions([
+      {
+        id: Date.now(),
+        type: "Pix enviado",
+        value,
+        date: "Hoje"
+      },
+      ...transactions
+    ]);
 
-    .slide{
-      min-height:100vh;
-      padding:60px;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      gap:30px;
-      border-bottom:1px solid rgba(255,255,255,0.1);
-    }
+    setMessage("Pix enviado com sucesso!");
+    setPixKey("");
+    setPixValue("");
+  }
 
-    .title{
-      font-family:'Bodoni', serif;
-      font-size:4rem;
-      color:#7ffcff;
-      text-shadow:0 0 20px rgba(127,252,255,0.5);
-    }
+  return (
 
-    .subtitle{
-      font-size:1.4rem;
-      max-width:900px;
-      line-height:1.7;
-      color:#e6ffff;
-    }
+    <div className="min-h-screen bg-gradient-to-br from-[#02141a] via-[#062a33] to-[#00b7b7] text-white p-6">
 
-    .cards{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-      gap:25px;
-      margin-top:20px;
-    }
+      {/* HEADER */}
 
-    .card{
-      background:rgba(255,255,255,0.08);
-      border:1px solid rgba(255,255,255,0.1);
-      backdrop-filter:blur(15px);
+      <div className="flex justify-between items-center mb-8">
+
+        <div>
+          <h1
+            className="text-5xl font-bold"
+            style={{ fontFamily: "Bodoni, serif" }}
+          >
+            PayNow
+          </h1>
+
+          <p className="text-cyan-100 mt-2">
+            Conta Digital e Meios de Pagamento
+          </p>
+        </div>
+
+        <button
+          onClick={() => setScreen("dashboard")}
+          className="bg-cyan-300 text-black px-5 py-3 rounded-2xl font-bold hover:scale-105 transition"
+        >
+          Dashboard
+        </button>
+
+      </div>
+
+      {/* LOGIN */}
+
+      {screen === "login" && (
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="max-w-md mx-auto bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20 shadow-2xl"
+        >
+
+          <h2
+            className="text-4xl mb-6 text-cyan-300"
+            style={{ fontFamily: "Bodoni, serif" }}
+          >
+            Login
+          </h2>
+
+          <input
+            type="text"
+            placeholder="CPF ou E-mail"
+            className="w-full p-4 rounded-xl bg-white/10 border border-white/20 mb-4 outline-none"
+          />
+
+          <input
+            type="password"
+            placeholder="Senha"
+            className="w-full p-4 rounded-xl bg-white/10 border border-white/20 mb-6 outline-none"
+          />
+
+          <button
+            onClick={() => setScreen("dashboard")}
+            className="w-full bg-cyan-300 text-black font-bold p-4 rounded-xl hover:scale-105 transition"
+          >
+            Entrar
+          </button>
+
+          <button
+            onClick={() => setScreen("register")}
+            className="w-full mt-4 border border-cyan-300 text-cyan-300 p-4 rounded-xl"
+          >
+            Criar Conta
+          </button>
+
+        </motion.div>
+
+      )}
+
+      {/* REGISTER */}
+
+      {screen === "register" && (
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="max-w-lg mx-auto bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20"
+        >
+
+          <h2
+            className="text-4xl mb-6 text-cyan-300"
+            style={{ fontFamily: "Bodoni, serif" }}
+          >
+            Cadastro
+          </h2>
+
+          <div className="grid gap-4">
+
+            <input
+              placeholder="Nome Completo"
+              className="p-4 rounded-xl bg-white/10 border border-white/20"
+            />
+
+            <input
+              placeholder="CPF"
+              className="p-4 rounded-xl bg-white/10 border border-white/20"
+            />
+
+            <input
+              placeholder="Telefone"
+              className="p-4 rounded-xl bg-white/10 border border-white/20"
+            />
+
+            <input
+              placeholder="E-mail"
+              className="p-4 rounded-xl bg-white/10 border border-white/20"
+            />
+
+            <input
+              type="password"
+              placeholder="Senha"
+              className="p-4 rounded-xl bg-white/10 border border-white/20"
+            />
+
+          </div>
+
+          <button
+            onClick={() => setScreen("dashboard")}
+            className="w-full mt-6 bg-cyan-300 text-black font-bold p-4 rounded-xl"
+          >
+            Criar Conta
+          </button>
+
+        </motion.div>
+
+      )}
+
+      {/* DASHBOARD */}
+
+      {screen === "dashboard" && (
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+
+          {/* CARDS */}
+
+          <div className="grid md:grid-cols-3 gap-6">
+
+            <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-6 border border-white/20">
+
+              <h3 className="text-cyan-300 text-xl mb-3">
+                💰 Saldo Atual
+              </h3>
+
+              <p className="text-4xl font-bold">
+                R$ {saldo}
+              </p>
+
+            </div>
+
+            <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-6 border border-white/20">
+
+              <h3 className="text-cyan-300 text-xl mb-3">
+                🔐 Segurança
+              </h3>
+
+              <p>2FA Ativado</p>
+              <p>Criptografia TLS</p>
+
+            </div>
+
+            <div className="bg-white/10 backdrop-blur-xl rounded-3xl p-6 border border-white/20">
+
+              <h3 className="text-cyan-300 text-xl mb-3">
+                📊 Dashboard
+              </h3>
+
+              <p>Entradas e saídas em tempo real.</p>
+
+            </div>
+
+          </div>
+
+          {/* PIX */}
+
+          <div className="mt-10 bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20">
+
+            <h2
+              className="text-4xl text-cyan-300 mb-6"
+              style={{ fontFamily: "Bodoni, serif" }}
+            >
+              Área Pix
+            </h2>
+
+            <div className="grid md:grid-cols-2 gap-4">
+
+              <input
+                value={pixKey}
+                onChange={(e) => setPixKey(e.target.value)}
+                placeholder="Chave Pix"
+                className="p-4 rounded-xl bg-white/10 border border-white/20"
+              />
+
+              <input
+                value={pixValue}
+                onChange={(e) => setPixValue(e.target.value)}
+                placeholder="Valor"
+                className="p-4 rounded-xl bg-white/10 border border-white/20"
+              />
+
+            </div>
+
+            <button
+              onClick={handlePix}
+              className="mt-6 bg-cyan-300 text-black font-bold px-8 py-4 rounded-xl hover:scale-105 transition"
+            >
+              Enviar Pix
+            </button>
+
+            {message && (
+              <p className="mt-4 text-cyan-200">
+                {message}
+              </p>
+            )}
+
+          </div>
+
+          {/* TRANSAÇÕES */}
+
+          <div className="mt-10 bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20">
+
+            <h2
+              className="text-4xl text-cyan-300 mb-6"
+              style={{ fontFamily: "Bodoni, serif" }}
+            >
+              Histórico
+            </h2>
+
+            <div className="space-y-4">
+
+              {transactions.map((item) => (
+
+                <div
+                  key={item.id}
+                  className="flex justify-between bg-white/5 p-4 rounded-2xl"
+                >
+
+                  <div>
+                    <p className="font-bold">
+                      {item.type}
+                    </p>
+
+                    <p className="text-sm text-cyan-100">
+                      {item.date}
+                    </p>
+                  </div>
+
+                  <p className="font-bold">
+                    R$ {item.value}
+                  </p>
+
+                </div>
+
+              ))}
+
+            </div>
+
+          </div>
+
+          {/* SCRUM */}
+
+          <div className="mt-10 bg-white/10 backdrop-blur-xl rounded-3xl p-8 border border-white/20">
+
+            <h2
+              className="text-4xl text-cyan-300 mb-8"
+              style={{ fontFamily: "Bodoni, serif" }}
+            >
+              Scrum Board
+            </h2>
+
+            <div className="grid md:grid-cols-3 gap-6">
+
+              <div className="bg-black/20 rounded-2xl p-5">
+
+                <h3 className="text-2xl mb-4">
+                  📌 To Do
+                </h3>
+
+                <div className="space-y-3">
+
+                  <div className="bg-white/10 p-4 rounded-xl">
+                    US01 — Login 2FA
+                  </div>
+
+                  <div className="bg-white/10 p-4 rounded-xl">
+                    US02 — Cadastro KYC
+                  </div>
+
+                </div>
+
+              </div>
+
+              <div className="bg-black/20 rounded-2xl p-5">
+
+                <h3 className="text-2xl mb-4">
+                  ⚙ Doing
+                </h3>
+
+                <div className="space-y-3">
+
+                  <div className="bg-white/10 p-4 rounded-xl">
+                    US03 — Integração Pix
+                  </div>
+
+                </div>
+
+              </div>
+
+              <div className="bg-black/20 rounded-2xl p-5">
+
+                <h3 className="text-2xl mb-4">
+                  ✅ Done
+                </h3>
+
+                <div className="space-y-3">
+
+                  <div className="bg-white/10 p-4 rounded-xl">
+                    Dashboard Financeiro
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </motion.div>
+
+      )}
+
+    </div>
+
+  );
+
+}
